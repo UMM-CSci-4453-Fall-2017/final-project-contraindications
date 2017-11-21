@@ -5,35 +5,52 @@ angular.module('register',[])
 
 function RegisterCtrl($scope,registerApi){
   $scope.noContraindications = true;
-
-  // Authentication
-  $scope.authenticated = false;
-  $scope.loginClick=loginClick;
-
-  // Button intialization
-   $scope.buttons=[]; //Initially all was still
-   $scope.errorMessage='';
-   $scope.isLoading=isLoading;
-   $scope.refreshButtons=refreshButtons;
-   $scope.buttonClick=buttonClick;
-
-// Line intialization
-   $scope.lines=[]; //Initially all was still
-   $scope.errorMessage='';
-   $scope.isLoading=isLoading;
-   $scope.refreshLines=refreshLines;
-   $scope.lineClick=lineClick;
-   $scope.total = 0;
+  $scope.possibleMedications = [{SynonymID: 1, Name: "Xenol", FactorID: 3},
+                                {SynonymID: 2, Name: "Sudefrinalin", FactorID: 3},
+                                {SynonymID: 3, Name: "Pizzafrin", FactorID: 1},
+                                {SynonymID: 4, Name: "Epilopal", FactorID: 2}];
+  $scope.yourMedications = {};
+  $scope.possibleConditions = [{SynonymID: 5, Name: "Smoking", FactorID: 4},
+                                {SynonymID: 6, Name: "Pregnant", FactorID: 5},
+                                {SynonymID: 7, Name: "Low blood pressure", FactorID: 6},
+                                {SynonymID: 8, Name: "Kidney Disease", FactorID: 7}];
+  $scope.yourConditions = {};
 
 // Universal
+  $scope.errorMessage='';
+   $scope.isLoading=isLoading;
    var loading = false;
+   $scope.setPanelHeights=setPanelHeights;
+
+
+
+
+   function setPanelHeights() {
+
+     var medicationPanel = document.getElementById('medicationPanel').offsetHeight;
+     var conditionPanel = document.getElementById('conditionPanel').offsetHeight;
+     console.log("med " + medicationPanel + " cond " + conditionPanel);
+     if(conditionPanel>medicationPanel)
+     {
+       console.log("here");
+         document.getElementById('medicationPanel').style.height=1000;
+     }
+     else
+     {
+       console.log("no here");
+         document.getElementById('conditionPanel').style.height=medicationPanel;
+     }
+   };
+
 
    function isLoading(){
     return loading;
    }
+
    // Authentication functions
    function loginClick(){
     console.log("clicked it");
+    setPanelHeights();
      $scope.errorMessage='';
      registerApi.clickLogin(username.value, pwd.value)
         .success(function(){
@@ -41,19 +58,6 @@ function RegisterCtrl($scope,registerApi){
         })
         .error(function(){$scope.errorMessage="Unable to click";});
    };
-
-   /* to be used later
-   var right=document.getElementById('rightdiv').style.height;
-var left=document.getElementById('leftdiv').style.height;
-if(left>right)
-{
-    document.getElementById('rightdiv').style.height=left;
-}
-else
-{
-    document.getElementById('leftdiv').style.height=right;
-}
-   */
 
 
    // Button functions
@@ -77,11 +81,12 @@ else
  function refreshLines(){
    loading=true;
    $scope.errorMessage='';
+   setPanelHeights();
    registerApi.getLines()
      .success(function(data){
         $scope.lines=data;
         decimalinator(); // formats price for UI
-        totalPrice(); // calculates and formats price for UI
+         // calculates and formats price for UI
         loading=false;
      })
      .error(function () {
@@ -142,7 +147,7 @@ else
      $scope.errorMessage='';
      registerApi.clickLine($event.target.parentElement.id)
         .success(function(){
-          totalPrice(); // calculates and formats price for UI
+          //totalPrice(); // calculates and formats price for UI
           refreshLines(); // gets lines from api and updates $scope.lines
         })
         .error(function(){$scope.errorMessage="Unable to click";});
