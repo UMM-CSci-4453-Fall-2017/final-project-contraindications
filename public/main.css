@@ -1,0 +1,13 @@
+.btn.btn-secondary {
+    width: 100%;
+}
+
+.dropdown-toggle .caret {
+    position: absolute;
+    right: 25px;
+    top: calc(50% - 2px);
+}
+
+.section{
+  margin-bottom: 30px;
+}

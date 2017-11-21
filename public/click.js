@@ -4,6 +4,8 @@ angular.module('register',[])
   .constant('apiUrl','http://localhost:1337'); // CHANGED for the lab 2017!
 
 function RegisterCtrl($scope,registerApi){
+  $scope.noContraindications = true;
+
   // Authentication
   $scope.authenticated = false;
   $scope.loginClick=loginClick;
@@ -39,6 +41,19 @@ function RegisterCtrl($scope,registerApi){
         })
         .error(function(){$scope.errorMessage="Unable to click";});
    };
+
+   /* to be used later
+   var right=document.getElementById('rightdiv').style.height;
+var left=document.getElementById('leftdiv').style.height;
+if(left>right)
+{
+    document.getElementById('rightdiv').style.height=left;
+}
+else
+{
+    document.getElementById('leftdiv').style.height=right;
+}
+   */
 
 
    // Button functions

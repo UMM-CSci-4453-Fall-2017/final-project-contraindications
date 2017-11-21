@@ -3,7 +3,9 @@
 <head lang="en">
     <meta charset="utf-8">
     <title>Contraindications</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular.min.js"></script>
     <script src="click.js"></script>
@@ -11,11 +13,90 @@
 <body ng-app="register" ng-controller="registerCtrl">
   <div class="col-md-2"></div>
 <div class="container-fluid col-md-8">
-    <div>
+  <!--Title and Description-->
+    <div class="section">
       <h1 align="center">Contraindication Checker</h1>
       <p> &nbsp; This site allows you to check for contraindications in your medication.
         Contraindications suggest that while taking your current medications or under your current conditions there may be complications.
         If you have contraindications consult your trusted medical professional. Information source: [website here]</p>
+    </div>
+    <!--Medication and Condition Selection-->
+    <div>
+      <!--Medication Selection-->
+      <div class="section col-md-6">
+        <div class="dropdown col-md-9">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Select your medication...<span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="#">HTML</a></li>
+            <li><a href="#">CSS</a></li>
+            <li><a href="#">JavaScript</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <button type="button" class="btn btn-success"><strong>Add Medication</strong></button>
+        </div>
+      </div>
+      <!--Condition Selection-->
+      <div class="section col-md-6">
+        <div class="dropdown col-md-9">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Select your condition...<span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="#">HTML</a></li>
+            <li><a href="#">CSS</a></li>
+            <li><a href="#">JavaScript</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <button type="button" class="btn btn-success"><strong>Add Condition</strong></button>
+        </div>
+      </div>
+    </div>
+    <!--Medication and Condition Lists-->
+    <div>
+      <!--Medication List-->
+      <div class="section col-md-6">
+        <div class="panel panel-info">
+          <div class="panel-heading">Your Medication(s):</div>
+          <div class="panel-body">
+            <ul>
+              <li>Your medication</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!--Condition List-->
+      <div class="section col-md-6">
+        <div class="panel panel-info">
+          <div class="panel-heading">Your Condition(s):</div>
+          <div class="panel-body">
+            <ul>
+              <li>Your condition</li>
+              <li>Your condition</li>
+              <li>Your condition</li>
+              <li>Your condition</li>
+              <li>Your condition</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Contraindications-->
+    <div class="col-md-12">
+      <div class="panel panel-danger" ng-hide="noContraindications">
+        <div class="panel-heading">Contraindication(s):</div>
+        <div class="panel-body">
+          <ul>
+            <li>Your Contraindication</li>
+            <li>Your Contraindication</li>
+            <li>Your Contraindication</li>
+            <li>Your Contraindication</li>
+            <li>Your Contraindication</li>
+          </ul>
+        </div>
+      </div>
+      <div class="panel panel-success" ng-show="noContraindications">
+        <div class="panel-heading">No Contraindications Found!</div>
+      </div>
     </div>
 </div>
 <div class="col-md-2"></div>
