@@ -3,3 +3,11 @@ Group Members:
 Sophia Mitchellette
 
 Sydney Richards
+
+Everything is Pair Programmed Together:
+-UI Mockup
+-Database Diagram
+-Implementing UI
+-Implementing Database
+-Implementing Javascript front end
+-Implementing Javascript back end
