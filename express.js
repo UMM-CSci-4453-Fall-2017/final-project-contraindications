@@ -23,6 +23,38 @@ app.get("/buttons",function(req,res){
   }})(res));
 });
 
+
+// gets medications from database
+// sends medication info to client
+app.get("/medications",function(req,res){
+  //gets list of synonyms of type 1 (medications)
+  var sql = 'SELECT SynonymID, Name as HoverName, IF(CHAR_LENGTH(Name) > 40, CONCAT(SUBSTRING(Name,1,40),"..."),SUBSTRING(Name,1,40))  as Name, LinkID, TypeID FROM rich1143.Synonyms WHERE TypeID = 1 ORDER BY Name;';
+  connection.query(sql,(function(res){return function(err,rows,fields){
+     if(err){console.log("We have an error:");
+             console.log(err);}
+     res.send(rows);
+  }})(res));
+});
+
+// gets conditions from database
+// sends condition info to client
+app.get("/conditions",function(req,res){
+  //gets list of synonyms of type 2 (conditions)
+  var sql = 'SELECT SynonymID, Name as HoverName, IF(CHAR_LENGTH(Name) > 40, CONCAT(SUBSTRING(Name,1,40),"..."),SUBSTRING(Name,1,40))  as Name, LinkID, TypeID FROM rich1143.Synonyms WHERE TypeID = 2 ORDER BY Name;';
+  connection.query(sql,(function(res){return function(err,rows,fields){
+     if(err){console.log("We have an error:");
+             console.log(err);}
+     res.send(rows);
+  }})(res));
+});
+
+
+
+
+
+
+
+
 // handles click information taken in from client
 app.get("/click",function(req,res){
   var htmlID = req.param('id');
