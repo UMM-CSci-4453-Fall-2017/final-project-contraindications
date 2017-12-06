@@ -24,26 +24,36 @@
     <div>
       <!--Medication Selection-->
       <div class="section col-md-6">
-        <div class="form-group col-md-9">
-          <select class="form-control" id="sel1">
-            <option selected>Choose your medication...</option>
-            <option ng-repeat="possibleMedication in possibleMedications">{{possibleMedication.Name}}</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <button type="button" class="btn btn-success" ng-click="setPanelHeights()"><strong>Add Medication</strong></button>
+        <div class="form-group col-md-12">
+          <div class="input-group col-md-12">
+            <input type="text" class="form-control" placeholder="Search for medication..." ng-model="medSearch">
+            <div class="input-group-btn">
+              <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li ng-repeat="possibleMedication in possibleMedications | filter: medSearch" data-toggle="tooltip" data-placement="top" title="{{possibleMedication.HoverName}}" ng-click="addClick(possibleMedication)"><a href="#">{{possibleMedication.Name}}</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <!--Condition Selection-->
       <div class="section col-md-6">
-        <div class="form-group col-md-9">
-          <select class="form-control" id="sel1">
-            <option selected>Choose your condition...</option>
-            <option ng-repeat="possibleCondition in possibleConditions">{{possibleCondition.Name}}</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <button type="button" class="btn btn-success"><strong>Add Condition</strong></button>
+        <div class="form-group col-md-12">
+          <div class="input-group col-md-12">
+            <input type="text" class="form-control" placeholder="Search for condition..." ng-model="conSearch">
+            <div class="input-group-btn">
+              <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li ng-repeat="possibleCondition in possibleConditions | filter: conSearch" data-toggle="tooltip" data-placement="top" title="{{possibleCondition.HoverName}}" ng-click="addClick(possibleCondition)"><a href="#">{{possibleCondition.Name}}</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -55,7 +65,7 @@
           <div class="panel-heading">Your Medication(s):</div>
           <div class="panel-body">
             <ul>
-              <li>Your medication</li>
+              <li ng-repeat="yourMedication in yourMedications">{{yourMedication.Name}}</li>
             </ul>
           </div>
         </div>
@@ -66,11 +76,7 @@
           <div class="panel-heading">Your Condition(s):</div>
           <div class="panel-body">
             <ul>
-              <li>Your condition</li>
-              <li>Your condition</li>
-              <li>Your condition</li>
-              <li>Your condition</li>
-              <li>Your condition</li>
+              <li ng-repeat="yourCondition in yourConditions">{{yourCondition.Name}}</li>
             </ul>
           </div>
         </div>
