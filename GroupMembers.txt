@@ -1,5 +1,27 @@
-Group Members:
+Group Members: Sophia Mitchellette & Sydney Richards
 
-Sophia Mitchellette
+WHAT: 
 
-Sydney Richards
+A contraindication checker website that allows you to check for contraindications in your medication. Contraindications suggest that while taking your current medications or under your current conditions there may be complications.
+
+Users will select medications they are taking or conditions they fall under from dropdown lists (they can also type to search the dropdown). Then the site will check our database to see if their medication/conditions conflict (have contraindications).
+
+WHO:
+
+Everything is Pair Programmed Together:
+-UI Mockup (5 pts)
+-Database Diagram (5 pts)
+-Implementing UI (10 pts)
+-Implementing Database (10 pts)
+  - Contraindications Table
+  - ContraindicationFactor Table
+  - Factor Table
+  - Link Table
+  - Synonym Table
+  - Type Table
+-Implementing Javascript front end (10 pts)
+  - Page must load information into dropdowns
+  - Selecting a dropdown should add the respective medication/condition to their list and update the contraindications display
+-Implementing Javascript back end (10 pts)
+  - SQL Query to retrieve medication/condition information for drop down display
+  - SQL Query to retrieve contraindications
