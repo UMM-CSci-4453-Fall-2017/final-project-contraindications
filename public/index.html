@@ -32,7 +32,7 @@
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-right">
-                  <li ng-repeat="possibleMedication in possibleMedications | filter: medSearch" data-toggle="tooltip" data-placement="top" title="{{possibleMedication.HoverName}}" ng-click="addClick(possibleMedication)"><a href="#">{{possibleMedication.Name}}</a></li>
+                  <li ng-repeat="possibleMedication in possibleMedications | filter: medSearch track by possibleMedication.SynonymID" data-toggle="tooltip" data-placement="top" title="{{possibleMedication.HoverName}}" ng-click="addClick(possibleMedication)"><a href="#">{{possibleMedication.Name}}</a></li>
                 </ul>
               </div>
             </div>
@@ -88,11 +88,14 @@
         <div class="panel-heading">Contraindication(s):</div>
         <div class="panel-body">
           <ul>
-            <li>Your Contraindication</li>
-            <li>Your Contraindication</li>
-            <li>Your Contraindication</li>
-            <li>Your Contraindication</li>
-            <li>Your Contraindication</li>
+            <li ng-repeat="contra in contraindications">
+              <div>
+                {{contra.Factors}}
+              </div>
+              <div>
+                Risk(s): {{contra.Description}}
+              </div>
+            </li>
           </ul>
         </div>
       </div>
@@ -100,8 +103,9 @@
         <div class="panel-heading">No Contraindications Found!</div>
       </div>
     </div>
+    <div class="col-md-12">
+      <center><button type="button" class="btn btn-danger" ng-click="clearEverything()">Clear Everything!</button></center>
+    </div>
 </div>
-<div class="col-md-2"></div>
-
 </body>
 </html>

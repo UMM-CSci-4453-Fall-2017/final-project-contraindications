@@ -11,6 +11,7 @@ function RegisterCtrl($scope,registerApi){
   $scope.yourConditions = [];
   $scope.contraindications = [];
   $scope.addClick=addClick;
+  $scope.clearEverything = clearEverything;
 
 // Universal
   $scope.errorMessage='';
@@ -28,6 +29,12 @@ function RegisterCtrl($scope,registerApi){
      }
      refreshDropdowns();  //make sure the buttons are loaded
 
+     function clearEverything() {
+       $scope.contraindications = [];
+       $scope.yourConditions = [];
+       $scope.yourMedications = [];
+       $scope.noContraindications = true;
+     }
 
    function initializeEmptyContras(data,allContraIDs)
    {
