@@ -1,9 +1,9 @@
-angular.module('register',[])
-  .controller('registerCtrl',RegisterCtrl)
-  .factory('registerApi',registerApi)
+angular.module('contra',[])
+  .controller('contraCtrl',ContraCtrl)
+  .factory('contraApi',contraApi)
   .constant('apiUrl','http://localhost:1337'); // CHANGED for the lab 2017!
 
-function RegisterCtrl($scope,registerApi){
+function ContraCtrl($scope,contraApi){
   $scope.noContraindications = true;
   $scope.possibleMedications = [];
   $scope.yourMedications = [];
@@ -22,13 +22,14 @@ function RegisterCtrl($scope,registerApi){
     return loading;
    }
 
-   // calls the database when medications or conditions
+   // calls the database when medications or conditions are selected in the user interface
      function addClick(addedSynonym){
         $scope.errorMessage='';
         refreshContras(addedSynonym);
      }
-     refreshDropdowns();  //make sure the buttons are loaded
+     refreshDropdowns();  //make sure the dropdowns are loaded
 
+     // clears selected medications and conditions, and their contraindications
      function clearEverything() {
        $scope.contraindications = [];
        $scope.yourConditions = [];
@@ -36,6 +37,8 @@ function RegisterCtrl($scope,registerApi){
        $scope.noContraindications = true;
      }
 
+   // takes in contraindications from database and mapping of ContraindicationIDs
+   // returns the unique ContraindicationIDs
    function initializeEmptyContras(data,allContraIDs)
    {
      $scope.contraindications = [];
@@ -52,6 +55,8 @@ function RegisterCtrl($scope,registerApi){
      return uniqueContraIDs;
    }
 
+   // takes in distinct contraindications from database and the unique ContraindicationIDs
+   // Adds factors and descriptions to $scope.contraindications
    function aggregateContras(data,uniqueContraIDs)
    {
      for(var i = 0; i < data.length; i++)
@@ -66,6 +71,8 @@ function RegisterCtrl($scope,registerApi){
      }
    }
 
+  // takes in selected conditions/medications from html and creates one array to hold them
+  // returns the SynonymIDs
   function getSynonymList(addedSynonym)
   {
     var yourMedSynIDs = $scope.yourMedications.map(m => m.SynonymID);
@@ -87,7 +94,7 @@ function RegisterCtrl($scope,registerApi){
     loading=true;
     $scope.errorMessage='';
 
-    registerApi.getContraindications(getSynonymList(addedSynonym))
+    contraApi.getContraindications(getSynonymList(addedSynonym))
       .success(function(data){
          aggregateContras(data,initializeEmptyContras(data,data.map(m => m.ContraindicationID)));
          if($scope.contraindications.length > 0)
@@ -108,7 +115,7 @@ function RegisterCtrl($scope,registerApi){
 function refreshDropdowns(){
   loading=true;
   $scope.errorMessage='';
-  registerApi.getMedications()
+  contraApi.getMedications()
     .success(function(data){
        $scope.possibleMedications=data;
        loading=false;
@@ -117,7 +124,7 @@ function refreshDropdowns(){
         $scope.errorMessage="Unable to load medications:  Database request failed";
         loading=false;
     });
-    registerApi.getConditions()
+    contraApi.getConditions()
       .success(function(data){
          $scope.possibleConditions=data;
          loading=false;
@@ -127,21 +134,20 @@ function refreshDropdowns(){
           loading=false;
       });
 }
-
 }
 
 // api that holds functions for retrieving button and list information
-function registerApi($http,apiUrl){
+function contraApi($http,apiUrl){
   return{
-    getMedications: function() {
+    getMedications: function() { // retrieves all medications from databse
       var url = apiUrl + '/medications';
       return $http.get(url);
     },
-    getConditions: function() {
+    getConditions: function() { // retrieves all possible conditions from database
       var url = apiUrl + '/conditions';
       return $http.get(url);
     },
-    getContraindications: function(synonymIDs) {
+    getContraindications: function(synonymIDs) { // get all contraindications given selected medications and conditions
       var url = apiUrl + '/contraindications?synonymIDs=' + synonymIDs;
       return $http.get(url);
     }

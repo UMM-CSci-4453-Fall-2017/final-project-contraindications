@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="main.css">
     <script src="click.js"></script>
 </head>
-<body ng-app="register" ng-controller="registerCtrl">
+<body ng-app="contra" ng-controller="contraCtrl">
   <div class="col-md-2"></div>
 <div class="container-fluid col-md-8">
   <!--Title and Description-->
@@ -32,7 +32,9 @@
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-right">
-                  <li ng-repeat="possibleMedication in possibleMedications | filter: medSearch track by possibleMedication.SynonymID" data-toggle="tooltip" data-placement="top" title="{{possibleMedication.HoverName}}" ng-click="addClick(possibleMedication)"><a href="#">{{possibleMedication.Name}}</a></li>
+                  <li ng-repeat="possibleMedication in possibleMedications |
+                  filter: medSearch track by possibleMedication.SynonymID" data-toggle="tooltip" data-placement="top" title="{{possibleMedication.HoverName}}"
+                  ng-click="addClick(possibleMedication)"><a href="#">{{possibleMedication.Name}}</a></li>
                 </ul>
               </div>
             </div>
@@ -49,7 +51,9 @@
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-right">
-                  <li ng-repeat="possibleCondition in possibleConditions | filter: conSearch" data-toggle="tooltip" data-placement="top" title="{{possibleCondition.HoverName}}" ng-click="addClick(possibleCondition)"><a href="#">{{possibleCondition.Name}}</a></li>
+                  <li ng-repeat="possibleCondition in possibleConditions |
+                  filter: conSearch" data-toggle="tooltip" data-placement="top" title="{{possibleCondition.HoverName}}"
+                  ng-click="addClick(possibleCondition)"><a href="#">{{possibleCondition.Name}}</a></li>
                 </ul>
               </div>
             </div>
@@ -103,6 +107,7 @@
         <div class="panel-heading">No Contraindications Found!</div>
       </div>
     </div>
+    <!--Button to clear selected medications and conditions-->
     <div class="col-md-12">
       <center><button type="button" class="btn btn-danger" ng-click="clearEverything()">Clear Everything!</button></center>
     </div>

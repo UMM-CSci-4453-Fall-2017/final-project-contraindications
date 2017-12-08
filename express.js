@@ -49,11 +49,19 @@ app.get("/conditions",function(req,res){
 });
 
 
-// handles click information taken in from client
+// takes in SynonymIDs of selected medications and conditions
+// queries the database to find all contraindications
 app.get("/contraindications",function(req,res){
   var synonymIDs = req.param('synonymIDs');
 
-sql = 'SELECT temp2.ContraindicationID, Description, Name, FactorID FROM rich1143.Contraindications RIGHT JOIN (SELECT * FROM (SELECT Name, ContraFactorID, ContraindicationID, ContraFactors.FactorID FROM rich1143.SynFactor LEFT JOIN rich1143.ContraFactors ON ContraFactors.FactorID = SynFactor.FactorID WHERE SynonymID IN (' + synonymIDs + ')) as temp WHERE FactorID IS NOT NULL AND ContraindicationID IN (SELECT ContraindicationID FROM (SELECT ContraindicationID, COUNT(ContraindicationID) as count FROM (SELECT SynonymID, Name, LinkID, ContraFactorID, ContraindicationID, ContraFactors.FactorID FROM rich1143.SynFactor LEFT JOIN rich1143.ContraFactors ON ContraFactors.FactorID = SynFactor.FactorID WHERE SynonymID IN (' + synonymIDs + ')) as temp WHERE FactorID IS NOT NULL GROUP BY ContraindicationID HAVING count > 1) as temp1)) as temp2 ON temp2.ContraindicationID = Contraindications.ContraindicationID;'
+sql = 'SELECT temp2.ContraindicationID, Description, Name, FactorID FROM rich1143.Contraindications '
++ 'RIGHT JOIN (SELECT * FROM (SELECT Name, ContraFactorID, ContraindicationID, ContraFactors.FactorID FROM rich1143.SynFactor '
++ 'LEFT JOIN rich1143.ContraFactors ON ContraFactors.FactorID = SynFactor.FactorID WHERE SynonymID IN (' + synonymIDs + ')) as temp '
++ 'WHERE FactorID IS NOT NULL AND ContraindicationID IN '
++ '(SELECT ContraindicationID FROM (SELECT ContraindicationID, COUNT(ContraindicationID) as count '
++ 'FROM (SELECT SynonymID, Name, LinkID, ContraFactorID, ContraindicationID, ContraFactors.FactorID FROM rich1143.SynFactor '
++ 'LEFT JOIN rich1143.ContraFactors ON ContraFactors.FactorID = SynFactor.FactorID WHERE SynonymID IN (' + synonymIDs + ')) as temp '
++ 'WHERE FactorID IS NOT NULL GROUP BY ContraindicationID HAVING count > 1) as temp1)) as temp2 ON temp2.ContraindicationID = Contraindications.ContraindicationID;'
 
   connection.query(sql,(function(res){return function(err,rows,fields){
      if(err){console.log("We have an insertion error:");
