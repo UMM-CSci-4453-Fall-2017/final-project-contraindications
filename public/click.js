@@ -24,45 +24,71 @@ function RegisterCtrl($scope,registerApi){
    // calls the database when medications or conditions
      function addClick(addedSynonym){
         $scope.errorMessage='';
-        registerApi.getContraindications(getSynonymList(addedSynonym))
-           .success(function(){
-             setPanelHeights();
-             refreshContras();
-           })
-           .error(function(){$scope.errorMessage="Unable to click";});
+        refreshContras(addedSynonym);
      }
      refreshDropdowns();  //make sure the buttons are loaded
 
 
-   // Other functions
+   function initializeEmptyContras(data,allContraIDs)
+   {
+     $scope.contraindications = [];
+     var uniqueContraIDs = [];
+     for(var i = 0; i < allContraIDs.length; i++)
+     {
+       if(!uniqueContraIDs.includes(allContraIDs[i]))
+       {
+         uniqueContraIDs.push(allContraIDs[i]);
+         $scope.contraindications.push({ContraindicationID: uniqueContraIDs[i], Factors: ""});
+       }
+     }
+
+     return uniqueContraIDs;
+   }
+
+   function aggregateContras(data,uniqueContraIDs)
+   {
+     for(var i = 0; i < data.length; i++)
+     {
+       var indexOfData = uniqueContraIDs.indexOf(data[i].ContraindicationID);
+       if($scope.contraindications[indexOfData].Factors.length > 1) {
+         $scope.contraindications[indexOfData].Factors += " and " + data[i].Name;
+       } else {
+         $scope.contraindications[indexOfData].Factors += data[i].Name;
+       }
+       $scope.contraindications[indexOfData].Description = data[i].Description;
+     }
+   }
+
   function getSynonymList(addedSynonym)
   {
-    if(addedSynonym.TypeID == 1)
+    var yourMedSynIDs = $scope.yourMedications.map(m => m.SynonymID);
+    var yourConSynIDs = $scope.yourConditions.map(c => c.SynonymID);
+    if(addedSynonym.TypeID == 1 && !yourMedSynIDs.includes(addedSynonym.SynonymID))
     {
       $scope.yourMedications.push(addedSynonym);
-      var synonymIDs = [];
-      for(var i = 0; i < $scope.yourMedications.length; i++)
-      {
-        synonymIDs.push($scope.yourMedications[i].SynonymID);
-      }
-    } else {
-      $scope.yourConditions.push(addedSynonym);
-      var synonymIDs = [];
-      for(var i = 0; i < $scope.yourConditions.length; i++)
-      {
-        synonymIDs.push($scope.yourConditions[i].SynonymID);
-      }
+      yourMedSynIDs.push(addedSynonym.SynonymID);
     }
-
+    else if (addedSynonym.TypeID == 2 && !yourConSynIDs.includes(addedSynonym.SynonymID)) {
+      $scope.yourConditions.push(addedSynonym);
+      yourConSynIDs.push(addedSynonym.SynonymID);
+    }
+    return yourMedSynIDs.concat(yourConSynIDs);
   }
 
    // when called, gets contraindications from api and updates $scope.contraindications
-  function refreshContras(){
+  function refreshContras(addedSynonym){
     loading=true;
     $scope.errorMessage='';
-    registerApi.getContraindications()
+
+    registerApi.getContraindications(getSynonymList(addedSynonym))
       .success(function(data){
-         $scope.contraindications=data;
+         aggregateContras(data,initializeEmptyContras(data,data.map(m => m.ContraindicationID)));
+         if($scope.contraindications.length > 0)
+         {
+           $scope.noContraindications = false;
+         } else {
+           $scope.noContraindications = true;
+         }
          loading=false;
       })
       .error(function () {
@@ -108,8 +134,8 @@ function registerApi($http,apiUrl){
       var url = apiUrl + '/conditions';
       return $http.get(url);
     },
-    getContraindications: function() {
-      var url = apiUrl + '/contraindications';
+    getContraindications: function(synonymIDs) {
+      var url = apiUrl + '/contraindications?synonymIDs=' + synonymIDs;
       return $http.get(url);
     }
  };
