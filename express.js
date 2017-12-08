@@ -11,6 +11,9 @@ var connection = mysql.createConnection(credentials); // setup the connection
 
 connection.connect(function(err){if(err){console.log(error)}});
 
+app.use(express.static(__dirname + '/public'));
+
+
 // gets medications from database
 // sends medication info to client
 app.get("/medications",function(req,res){
