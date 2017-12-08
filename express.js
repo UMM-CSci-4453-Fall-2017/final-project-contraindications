@@ -11,19 +11,6 @@ var connection = mysql.createConnection(credentials); // setup the connection
 
 connection.connect(function(err){if(err){console.log(error)}});
 
-// gets buttons from database
-// sends button info to client
-app.use(express.static(__dirname + '/public'));
-app.get("/buttons",function(req,res){
-  var sql = 'SELECT * FROM mitc0417.till_buttons'; // sql query to get information from till_buttons
-  connection.query(sql,(function(res){return function(err,rows,fields){
-     if(err){console.log("We have an error:");
-             console.log(err);}
-     res.send(rows);
-  }})(res));
-});
-
-
 // gets medications from database
 // sends medication info to client
 app.get("/medications",function(req,res){
