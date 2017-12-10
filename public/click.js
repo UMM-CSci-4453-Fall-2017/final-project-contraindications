@@ -48,10 +48,9 @@ function ContraCtrl($scope,contraApi){
        if(!uniqueContraIDs.includes(allContraIDs[i]))
        {
          uniqueContraIDs.push(allContraIDs[i]);
-         $scope.contraindications.push({ContraindicationID: uniqueContraIDs[i], Factors: ""});
+         $scope.contraindications.push({ContraindicationID: allContraIDs[i], Factors: ""});
        }
      }
-
      return uniqueContraIDs;
    }
 
@@ -69,6 +68,40 @@ function ContraCtrl($scope,contraApi){
        }
        $scope.contraindications[indexOfData].Description = data[i].Description;
      }
+     return true;
+   }
+
+   // finds indexes of duplicate contraindications
+   function findDuplicates(boolean)
+   {
+     var toBeDeleted = [];
+     for(var i = 0; i < $scope.contraindications.length; i++)
+     {
+       for(var j = i + 1; j < $scope.contraindications.length; j++)
+       {
+         if($scope.contraindications[i].Factors == $scope.contraindications[j].Factors && $scope.contraindications[i].Description == $scope.contraindications[j].Description)
+         {
+           if(!toBeDeleted.includes(j)){
+             toBeDeleted.push(j);
+           }
+         }
+       }
+     }
+     return toBeDeleted;
+   }
+
+   //removes duplicate contraindications at the indexes specified by toBeDeleted
+   function removeDuplicates(toBeDeleted)
+   {
+     var contras = [];
+     for(var i = $scope.contraindications.length - 1; i >= 0; i--)
+     {
+       if(!toBeDeleted.includes(i))
+       {
+         contras.push($scope.contraindications[i]);
+       }
+     }
+     $scope.contraindications = contras;
    }
 
   // takes in selected conditions/medications from html and creates one array to hold them
@@ -96,7 +129,7 @@ function ContraCtrl($scope,contraApi){
 
     contraApi.getContraindications(getSynonymList(addedSynonym))
       .success(function(data){
-         aggregateContras(data,initializeEmptyContras(data,data.map(m => m.ContraindicationID)));
+         removeDuplicates(findDuplicates(aggregateContras(data,initializeEmptyContras(data,data.map(m => m.ContraindicationID)))));
          if($scope.contraindications.length > 0)
          {
            $scope.noContraindications = false;
